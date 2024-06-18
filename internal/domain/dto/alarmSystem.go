@@ -8,7 +8,7 @@ type CreateAlarmSystem struct {
 
 // UpdateAlarmSystem is a struct that represents a DTO to update an existing AlarmSystem.
 type UpdateAlarmSystem struct {
-	ID          uint   `json:"ID"`
+	UUID        string `json:"uuid"`
 	AccessToken string `json:"access_token"`
 	Name        string `json:"name"`
 	Activated   bool   `json:"activated"`

@@ -1,18 +1,18 @@
 package services
 
 import (
-	"context"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
 
 // BulbStorage is an interface that contains methods to interact with the database.
 type BulbStorage interface {
-	GetOne(id uint) (error, *entities.Bulb)
-	GetAll(ctx context.Context) []*entities.Bulb
-	Create(bulb *entities.Bulb) (error, *entities.Bulb)
-	Update(bulb *entities.Bulb) (error, *entities.Bulb)
-	Delete(bulb *entities.Bulb) error
+	GetByUUID(uuid string) (*entities.Bulb, error)
+	GetAll(limit, offset int) ([]*entities.Bulb, error)
+	Create(bulb *entities.Bulb) (*entities.Bulb, error)
+	Update(bulb *entities.Bulb) (*entities.Bulb, error)
+	Delete(uuid string) error
+	DoTask(bulb *entities.Bulb, task *entities.Task) error
 }
 
 // bulbService is a struct that contains a pointer to a BulbStorage instance.
@@ -26,30 +26,41 @@ func NewBulbService(storage BulbStorage) *bulbService {
 }
 
 // Create is a method to create a new Bulb in database using a CreateBulb DTO.
-func (s bulbService) Create(ctx context.Context, createBulb *dto.CreateBulb) (*entities.Bulb, error) {
-	panic("implement me")
+func (s bulbService) Create(createBulb *dto.CreateBulb) (*entities.Bulb, error) {
+	bulb := &entities.Bulb{
+		AccessToken: createBulb.AccessToken,
+		Name:        createBulb.Name,
+	}
+	return s.storage.Create(bulb)
 }
 
-// GetById is a method that returns an error and a pointer to a Bulb instance.
-func (s bulbService) GetById(ctx context.Context, id uint) (*entities.Bulb, error) {
-	//TODO implement me
-	panic("implement me")
+// GetByUUID is a method that returns a pointer to a Bulb instance and error.
+func (s bulbService) GetByUUID(uuid string) (*entities.Bulb, error) {
+	return s.storage.GetByUUID(uuid)
 }
 
-// GetAll is a method that returns a slice of Bulb instances.
-func (s bulbService) GetAll(ctx context.Context) ([]entities.Bulb, error) {
-	//TODO implement me
-	panic("implement me")
+// GetAll is a method that returns a slice of pointers to a Bulb and error.
+func (s bulbService) GetAll(limit, offset int) ([]*entities.Bulb, error) {
+	return s.storage.GetAll(limit, offset)
 }
 
 // Update is a method to update an existing Bulb in database using an UpdateBulb DTO.
-func (s bulbService) Update(ctx context.Context, updateBulb *dto.UpdateBulb) error {
-	//TODO implement me
-	panic("implement me")
+func (s bulbService) Update(updateBulb *dto.UpdateBulb) (*entities.Bulb, error) {
+	var bulb *entities.Bulb
+	bulb.UUID = updateBulb.UUID
+	bulb.AccessToken = updateBulb.AccessToken
+	bulb.Name = updateBulb.Name
+	bulb.Activated = updateBulb.Activated
+	bulb.Brightness = updateBulb.Brightness
+	return s.storage.Update(bulb)
 }
 
 // Delete is a method to delete an existing Bulb in database.
-func (s bulbService) Delete(ctx context.Context, id uint) error {
-	//TODO implement me
-	panic("implement me")
+func (s bulbService) Delete(uuid string) error {
+	return s.storage.Delete(uuid)
+}
+
+// DoTask is a method to perform a task on a Bulb.
+func (s bulbService) DoTask(bulb *entities.Bulb, task *entities.Task) error {
+	return s.storage.DoTask(bulb, task)
 }

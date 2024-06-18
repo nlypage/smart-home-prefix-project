@@ -1,18 +1,18 @@
 package services
 
 import (
-	"context"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
 
 // ConditionerStorage is an interface that contains methods to interact with the database.
 type ConditionerStorage interface {
-	GetOne(id uint) (error, *entities.Conditioner)
-	GetAll(ctx context.Context) []*entities.Conditioner
-	Create(conditioner *entities.Conditioner) (error, *entities.Conditioner)
-	Update(conditioner *entities.Conditioner) (error, *entities.Conditioner)
-	Delete(conditioner *entities.Conditioner) error
+	GetByUUID(uuid string) (*entities.Conditioner, error)
+	GetAll(limit, offset int) ([]*entities.Conditioner, error)
+	Create(conditioner *entities.Conditioner) (*entities.Conditioner, error)
+	Update(conditioner *entities.Conditioner) (*entities.Conditioner, error)
+	Delete(uuid string) error
+	DoTask(conditioner *entities.Conditioner, task *entities.Task) error
 }
 
 // conditionerService is a struct that contains a pointer to a ConditionerStorage instance.
@@ -26,30 +26,41 @@ func NewConditionerService(storage ConditionerStorage) *conditionerService {
 }
 
 // Create is a method to create a new Conditioner in database using a CreateConditioner DTO.
-func (s conditionerService) Create(ctx context.Context, createConditioner *dto.CreateConditioner) (*entities.Bulb, error) {
-	panic("implement me")
+func (s conditionerService) Create(createConditioner *dto.CreateConditioner) (*entities.Conditioner, error) {
+	conditioner := &entities.Conditioner{
+		AccessToken: createConditioner.AccessToken,
+		Name:        createConditioner.Name,
+	}
+	return s.storage.Create(conditioner)
 }
 
-// GetById is a method that returns an error and a pointer to a Conditioner instance.
-func (s conditionerService) GetById(ctx context.Context, id uint) (*entities.Conditioner, error) {
-	//TODO implement me
-	panic("implement me")
+// GetByUUID is a method that returns a pointer to a Conditioner instance and error.
+func (s conditionerService) GetByUUID(uuid string) (*entities.Conditioner, error) {
+	return s.storage.GetByUUID(uuid)
 }
 
-// GetAll is a method that returns a slice of Conditioner instances.
-func (s conditionerService) GetAll(ctx context.Context) ([]entities.Conditioner, error) {
-	//TODO implement me
-	panic("implement me")
+// GetAll is a method that returns a slice of pointers to Conditioner.
+func (s conditionerService) GetAll(limit, offset int) ([]*entities.Conditioner, error) {
+	return s.storage.GetAll(limit, offset)
 }
 
 // Update is a method to update an existing Conditioner in database using an UpdateConditioner DTO.
-func (s conditionerService) Update(ctx context.Context, updateConditioner *dto.UpdateConditioner) error {
-	//TODO implement me
-	panic("implement me")
+func (s conditionerService) Update(updateConditioner *dto.UpdateConditioner) (*entities.Conditioner, error) {
+	var conditioner *entities.Conditioner
+	conditioner.UUID = updateConditioner.UUID
+	conditioner.AccessToken = updateConditioner.AccessToken
+	conditioner.Name = updateConditioner.Name
+	conditioner.Activated = updateConditioner.Activated
+	conditioner.Temperature = updateConditioner.Temperature
+	return s.storage.Update(conditioner)
 }
 
 // Delete is a method to delete an existing Conditioner in database.
-func (s conditionerService) Delete(ctx context.Context, id uint) error {
-	//TODO implement me
-	panic("implement me")
+func (s conditionerService) Delete(uuid string) error {
+	return s.storage.Delete(uuid)
+}
+
+// DoTask is a method to execute a task on a Conditioner.
+func (s conditionerService) DoTask(conditioner *entities.Conditioner, task *entities.Task) error {
+	return s.storage.DoTask(conditioner, task)
 }

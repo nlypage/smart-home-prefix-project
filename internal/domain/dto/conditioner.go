@@ -8,7 +8,7 @@ type CreateConditioner struct {
 
 // UpdateConditioner is a struct that represents a DTO to update an existing Conditioner.
 type UpdateConditioner struct {
-	ID          uint   `json:"id"`
+	UUID        string `json:"uuid"`
 	AccessToken string `json:"access_token"`
 	Name        string `json:"name"`
 	Activated   bool   `json:"activated"`
