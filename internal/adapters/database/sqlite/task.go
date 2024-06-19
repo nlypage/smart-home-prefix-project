@@ -18,26 +18,26 @@ func NewTaskStorage(db *gorm.DB) *taskStorage {
 // GetByUUID is a method that returns a pointer to a Task instance and error.
 func (s *taskStorage) GetByUUID(uuid string) (*entities.Task, error) {
 	var task *entities.Task
-	err := s.db.Model(&entities.Task{}).Where("uuid = ?", uuid).First(task).Error
+	err := s.db.Model(&entities.Task{}).Where("uuid = ?", uuid).First(&task).Error
 	return task, err
 }
 
 // GetAll is a method that returns a slice of pointers to Task instances.
 func (s *taskStorage) GetAll(limit, offset int) ([]*entities.Task, error) {
 	var tasks []*entities.Task
-	err := s.db.Model(&entities.Task{}).Limit(limit).Offset(offset).Find(tasks).Error
+	err := s.db.Model(&entities.Task{}).Limit(limit).Offset(offset).Find(&tasks).Error
 	return tasks, err
 }
 
 // Create is a method to create a new Task in database.
 func (s *taskStorage) Create(task *entities.Task) (*entities.Task, error) {
-	err := s.db.Create(task).Error
+	err := s.db.Create(&task).Error
 	return task, err
 }
 
 // Update is a method to update an existing Task in database.
 func (s *taskStorage) Update(task *entities.Task) (*entities.Task, error) {
-	err := s.db.Model(&entities.Task{}).Where("uuid = ", task.UUID).Updates(task).Error
+	err := s.db.Model(&entities.Task{}).Where("uuid = ", task.UUID).Updates(&task).Error
 	return task, err
 }
 
@@ -50,6 +50,6 @@ func (s *taskStorage) Delete(uuid string) error {
 // GetTaskObject is a method that returns a pointer to a TaskObject instance and error.
 func (s *taskStorage) GetTaskObject(uuid string) (*entities.TaskObject, error) {
 	var taskObject *entities.TaskObject
-	err := s.db.Where("uuid = ?", uuid).First(taskObject).Error
+	err := s.db.Where("uuid = ?", uuid).First(&taskObject).Error
 	return taskObject, err
 }

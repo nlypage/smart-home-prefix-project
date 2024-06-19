@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
@@ -28,6 +29,7 @@ func NewConditionerService(storage ConditionerStorage) *conditionerService {
 // Create is a method to create a new Conditioner in database using a CreateConditioner DTO.
 func (s conditionerService) Create(createConditioner *dto.CreateConditioner) (*entities.Conditioner, error) {
 	conditioner := &entities.Conditioner{
+		UUID:        uuid.NewString(),
 		AccessToken: createConditioner.AccessToken,
 		Name:        createConditioner.Name,
 	}

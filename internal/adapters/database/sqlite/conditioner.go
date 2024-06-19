@@ -20,26 +20,26 @@ func NewConditionerStorage(db *gorm.DB) *conditionerStorage {
 // GetByUUID is a method that returns a pointer to a Conditioner and error.
 func (s *conditionerStorage) GetByUUID(uuid string) (*entities.Conditioner, error) {
 	var conditioner *entities.Conditioner
-	err := s.db.Model(&entities.Conditioner{}).Where("uuid = ?", uuid).First(conditioner).Error
+	err := s.db.Model(&entities.Conditioner{}).Where("uuid = ?", uuid).First(&conditioner).Error
 	return conditioner, err
 }
 
 // GetAll is a method that returns a slice of pointers to Conditioner instances.
 func (s *conditionerStorage) GetAll(limit, offset int) ([]*entities.Conditioner, error) {
 	var conditioners []*entities.Conditioner
-	err := s.db.Model(&entities.Conditioner{}).Limit(limit).Offset(offset).Find(conditioners).Error
+	err := s.db.Model(&entities.Conditioner{}).Limit(limit).Offset(offset).Find(&conditioners).Error
 	return conditioners, err
 }
 
 // Create is a method to create a new Conditioner in database.
 func (s *conditionerStorage) Create(conditioner *entities.Conditioner) (*entities.Conditioner, error) {
-	err := s.db.Create(conditioner).Error
+	err := s.db.Create(&conditioner).Error
 	return conditioner, err
 }
 
 // Update is a method to update an existing Conditioner in database.
 func (s *conditionerStorage) Update(conditioner *entities.Conditioner) (*entities.Conditioner, error) {
-	err := s.db.Model(&entities.Conditioner{}).Where("uuid = ?", conditioner.UUID).Updates(conditioner).Error
+	err := s.db.Model(&entities.Conditioner{}).Where("uuid = ?", conditioner.UUID).Updates(&conditioner).Error
 	return conditioner, err
 }
 

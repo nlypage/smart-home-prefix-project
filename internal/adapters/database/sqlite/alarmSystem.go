@@ -17,29 +17,29 @@ func NewAlarmSystemStorage(db *gorm.DB) *alarmSystemStorage {
 	return &alarmSystemStorage{db: db}
 }
 
+// Create is a method to create a new AlarmSystem in database.
+func (s *alarmSystemStorage) Create(alarmSystem *entities.AlarmSystem) (*entities.AlarmSystem, error) {
+	err := s.db.Create(&alarmSystem).Error
+	return alarmSystem, err
+}
+
 // GetByUUID is a method that returns an error and a pointer to an AlarmSystem instance.
 func (s *alarmSystemStorage) GetByUUID(uuid string) (*entities.AlarmSystem, error) {
 	var alarmSystem *entities.AlarmSystem
-	err := s.db.Model(&entities.AlarmSystem{}).Where("uuid = ?", uuid).First(alarmSystem).Error
+	err := s.db.Model(&entities.AlarmSystem{}).Where("uuid = ?", uuid).First(&alarmSystem).Error
 	return alarmSystem, err
 }
 
 // GetAll is a method that returns a slice of pointers to AlarmSystem instances.
 func (s *alarmSystemStorage) GetAll(limit, offset int) ([]*entities.AlarmSystem, error) {
 	var alarmSystems []*entities.AlarmSystem
-	err := s.db.Model(&entities.AlarmSystem{}).Limit(limit).Offset(offset).Find(alarmSystems).Error
+	err := s.db.Model(&entities.AlarmSystem{}).Limit(limit).Offset(offset).Find(&alarmSystems).Error
 	return alarmSystems, err
-}
-
-// Create is a method to create a new AlarmSystem in database.
-func (s *alarmSystemStorage) Create(alarmSystem *entities.AlarmSystem) (*entities.AlarmSystem, error) {
-	err := s.db.Create(alarmSystem).Error
-	return alarmSystem, err
 }
 
 // Update is a method to update an existing AlarmSystem in database.
 func (s *alarmSystemStorage) Update(alarmSystem *entities.AlarmSystem) (*entities.AlarmSystem, error) {
-	err := s.db.Model(&entities.AlarmSystem{}).Where("uuid = ?", alarmSystem.UUID).Updates(alarmSystem).Error
+	err := s.db.Model(&entities.AlarmSystem{}).Where("uuid = ?", alarmSystem.UUID).Updates(&alarmSystem).Error
 	return alarmSystem, err
 }
 
@@ -59,7 +59,7 @@ func (s *alarmSystemStorage) DoTask(alarmSystem *entities.AlarmSystem, task *ent
 		default:
 			return errroz.WrongTaskAction
 		}
-		return s.db.Model(&entities.AlarmSystem{}).Where("uuid = ?", alarmSystem.UUID).Updates(alarmSystem).Error
+		return s.db.Model(&entities.AlarmSystem{}).Where("uuid = ?", alarmSystem.UUID).Updates(&alarmSystem).Error
 	}
 	return errroz.TaskNotActive
 }

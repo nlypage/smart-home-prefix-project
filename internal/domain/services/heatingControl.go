@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
@@ -28,6 +29,7 @@ func NewHeatingControlService(storage HeatingControlStorage) *heatingControlServ
 // Create is a method to create a new HeatingControl in database using a CreateHeatingControl DTO.
 func (s heatingControlService) Create(createHeatingControl *dto.CreateHeatingControl) (*entities.HeatingControl, error) {
 	heatingControl := &entities.HeatingControl{
+		UUID:        uuid.NewString(),
 		AccessToken: createHeatingControl.AccessToken,
 		Name:        createHeatingControl.Name,
 	}

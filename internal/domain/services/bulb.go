@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
@@ -28,6 +29,7 @@ func NewBulbService(storage BulbStorage) *bulbService {
 // Create is a method to create a new Bulb in database using a CreateBulb DTO.
 func (s bulbService) Create(createBulb *dto.CreateBulb) (*entities.Bulb, error) {
 	bulb := &entities.Bulb{
+		UUID:        uuid.NewString(),
 		AccessToken: createBulb.AccessToken,
 		Name:        createBulb.Name,
 	}

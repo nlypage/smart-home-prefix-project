@@ -20,26 +20,26 @@ func NewHeatingControlStorage(db *gorm.DB) *heatingControlStorage {
 // GetByUUID is a method that returns an error and a pointer to a HeatingControl instance.
 func (s *heatingControlStorage) GetByUUID(uuid string) (*entities.HeatingControl, error) {
 	var heatingControl *entities.HeatingControl
-	err := s.db.Model(&entities.HeatingControl{}).Where("uuid = ?", uuid).First(heatingControl).Error
+	err := s.db.Model(&entities.HeatingControl{}).Where("uuid = ?", uuid).First(&heatingControl).Error
 	return heatingControl, err
 }
 
 // GetAll is a method that returns a slice of pointers to HeatingControl instances.
 func (s *heatingControlStorage) GetAll(limit, offset int) ([]*entities.HeatingControl, error) {
 	var heatingControls []*entities.HeatingControl
-	err := s.db.Model(&entities.HeatingControl{}).Limit(limit).Offset(offset).Find(heatingControls).Error
+	err := s.db.Model(&entities.HeatingControl{}).Limit(limit).Offset(offset).Find(&heatingControls).Error
 	return heatingControls, err
 }
 
 // Create is a method to create a new HeatingControl in database.
 func (s *heatingControlStorage) Create(heatingControl *entities.HeatingControl) (*entities.HeatingControl, error) {
-	err := s.db.Create(heatingControl).Error
+	err := s.db.Create(&heatingControl).Error
 	return heatingControl, err
 }
 
 // Update is a method to update an existing HeatingControl in database.
 func (s *heatingControlStorage) Update(heatingControl *entities.HeatingControl) (*entities.HeatingControl, error) {
-	err := s.db.Model(&entities.HeatingControl{}).Where("uuid = ", heatingControl.UUID).Updates(heatingControl).Error
+	err := s.db.Model(&entities.HeatingControl{}).Where("uuid = ", heatingControl.UUID).Updates(&heatingControl).Error
 	return heatingControl, err
 }
 

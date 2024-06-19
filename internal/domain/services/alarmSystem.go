@@ -1,15 +1,16 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
 
 // AlarmSystemStorage is an interface that contains methods to interact with the database.
 type AlarmSystemStorage interface {
+	Create(alarmSystem *entities.AlarmSystem) (*entities.AlarmSystem, error)
 	GetByUUID(uuid string) (*entities.AlarmSystem, error)
 	GetAll(limit, offset int) ([]*entities.AlarmSystem, error)
-	Create(alarmSystem *entities.AlarmSystem) (*entities.AlarmSystem, error)
 	Update(alarmSystem *entities.AlarmSystem) (*entities.AlarmSystem, error)
 	Delete(uuid string) error
 	DoTask(alarmSystem *entities.AlarmSystem, task *entities.Task) error
@@ -28,6 +29,7 @@ func NewAlarmSystemService(storage AlarmSystemStorage) *alarmSystemService {
 // Create is a method to create a new AlarmSystem in database using CreateAlarmSystem DTO.
 func (s alarmSystemService) Create(createAlarmSystem *dto.CreateAlarmSystem) (*entities.AlarmSystem, error) {
 	alarmSystem := &entities.AlarmSystem{
+		UUID:        uuid.NewString(),
 		AccessToken: createAlarmSystem.AccessToken,
 		Name:        createAlarmSystem.Name,
 	}

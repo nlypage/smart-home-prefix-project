@@ -20,26 +20,26 @@ func NewBulbStorage(db *gorm.DB) *bulbStorage {
 // GetByUUID is a method that returns an error and a pointer to a Bulb instance.
 func (s *bulbStorage) GetByUUID(uuid string) (*entities.Bulb, error) {
 	var bulb *entities.Bulb
-	err := s.db.Model(&entities.Bulb{}).Where("uuid = ?", uuid).First(bulb).Error
+	err := s.db.Model(&entities.Bulb{}).Where("uuid = ?", uuid).First(&bulb).Error
 	return bulb, err
 }
 
 // GetAll is a method that returns a slice of pointers to Bulb instances.
 func (s *bulbStorage) GetAll(limit, offset int) ([]*entities.Bulb, error) {
 	var bulbs []*entities.Bulb
-	err := s.db.Model(&entities.Bulb{}).Limit(limit).Offset(offset).Find(bulbs).Error
+	err := s.db.Model(&entities.Bulb{}).Limit(limit).Offset(offset).Find(&bulbs).Error
 	return bulbs, err
 }
 
 // Create is a method to create a new Bulb in database.
 func (s *bulbStorage) Create(bulb *entities.Bulb) (*entities.Bulb, error) {
-	err := s.db.Create(bulb).Error
+	err := s.db.Create(&bulb).Error
 	return bulb, err
 }
 
 // Update is a method to update an existing Bulb in database.
 func (s *bulbStorage) Update(bulb *entities.Bulb) (*entities.Bulb, error) {
-	err := s.db.Model(&entities.Bulb{}).Where("uuid = ?", bulb.UUID).Updates(bulb).Error
+	err := s.db.Model(&entities.Bulb{}).Where("uuid = ?", bulb.UUID).Updates(&bulb).Error
 	return bulb, err
 }
 
@@ -59,7 +59,7 @@ func (s *bulbStorage) DoTask(buLb *entities.Bulb, task *entities.Task) error {
 		default:
 			return errroz.WrongTaskAction
 		}
-		return s.db.Model(&entities.AlarmSystem{}).Where("uuid = ", buLb.UUID).Updates(buLb).Error
+		return s.db.Model(&entities.AlarmSystem{}).Where("uuid = ", buLb.UUID).Updates(&buLb).Error
 	}
 	return errroz.TaskNotActive
 }

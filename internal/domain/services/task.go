@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/dto"
 	"github.com/nlypage/smart-home-prefix-project/internal/domain/entities"
 )
@@ -33,6 +34,7 @@ func (s taskService) Create(createTask *dto.CreateTask) (*entities.Task, error) 
 	}
 
 	task := &entities.Task{
+		UUID:       uuid.NewString(),
 		TaskObject: taskObject,
 		Time:       createTask.Time,
 		DaysOfWeek: createTask.DaysOfWeek,
