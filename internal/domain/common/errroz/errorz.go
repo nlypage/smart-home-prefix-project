@@ -5,6 +5,7 @@ import "errors"
 // Declaring constants for error messages
 
 var (
-	WrongTaskAction = errors.New("wrong task action")
-	TaskNotActive   = errors.New("task is not active")
+	WrongTaskAction   = errors.New("wrong task action")
+	TaskNotActive     = errors.New("task is not active")
+	InvalidTaskObject = errors.New("invalid task object")
 )
